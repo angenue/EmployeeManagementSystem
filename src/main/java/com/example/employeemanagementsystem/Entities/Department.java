@@ -20,7 +20,7 @@ public class Department {
 
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "manager_id")
     private Employee manager;
 
