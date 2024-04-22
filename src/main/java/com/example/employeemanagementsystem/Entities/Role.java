@@ -19,4 +19,8 @@ public class Role {
 
     @Enumerated(EnumType.STRING) //the only roles are manager and employee
     private UserRole roleName;
+
+    public Role(UserRole roleName) {
+        this.roleName = roleName;
+    }
 }
