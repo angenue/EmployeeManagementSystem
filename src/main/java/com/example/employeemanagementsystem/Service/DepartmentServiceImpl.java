@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService{
 
 
     //removes employee by id
-    @Override
+   /* @Override
     public void removeEmployeeFromDepartment(Long departmentId, Long employeeId) {
         Department department = getDepartmentById(departmentId);
         if (department != null) {
@@ -53,7 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService{
             department.getEmployees().removeIf(employee -> employee.getId().equals(employeeId));
             departmentRepository.save(department);
         }
-    }
+    }*/
 
     @Override
     public Employee getDepartmentManager(Long departmentId) {

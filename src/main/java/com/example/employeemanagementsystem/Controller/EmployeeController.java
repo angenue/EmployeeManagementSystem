@@ -21,11 +21,18 @@ public class EmployeeController {
     }
 
     // Update employee
-    @PatchMapping("/employees/{employeeId}")
+    @PatchMapping("/update/{employeeId}")
     public ResponseEntity<Void> updateEmployeeField(@RequestBody Map<String, Object> fieldsToUpdate, @PathVariable Long employeeId) {
         for (Map.Entry<String, Object> entry : fieldsToUpdate.entrySet()) {
             employeeService.editEmployeeField(employeeId, entry.getKey(), entry.getValue());
         }
+        return ResponseEntity.noContent().build();
+    }
+
+    //remove employee
+    @DeleteMapping("/delete/{employeeId}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long employeeId) {
+        employeeService.removeEmployee(employeeId);
         return ResponseEntity.noContent().build();
     }
 }

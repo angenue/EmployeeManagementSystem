@@ -38,15 +38,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         //creating login info
         User user = createUserFromDTO(userEmployeeDTO);
-        Role role = roleRepository.findByRoleName(UserRole.EMPLOYEE)
-                .orElseThrow(() -> new IllegalArgumentException("Employee role not found"));
-        user.setRole(role);
-
+        user.setRoleName(UserRole.EMPLOYEE);
 
 
         //employee info
         Employee employee = createEmployeeFromDTO(userEmployeeDTO, department);
-        //employee.setUser(user);
 
         user.setEmployee(employee);
 
@@ -64,9 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         //creating login info
         User user = createUserFromDTO(userEmployeeDTO);
-        Role role = roleRepository.findByRoleName(UserRole.MANAGER)
-                .orElseThrow(() -> new IllegalArgumentException("Manager role not found"));
-        user.setRole(role);
+        user.setRoleName(UserRole.MANAGER);
 
 
         //employee info
@@ -116,14 +110,36 @@ public class EmployeeServiceImpl implements EmployeeService{
                 employeeRepository.save(employee);
             }
             case "role" -> {
-                Role role = roleRepository.findById((Long) newValue)
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found"));
-                user.setRole(role); // Update the role
-                userRepository.save(user); // Save the updated user
-            }
+                UserRole newRole = (UserRole) newValue;
+                user.setRoleName(newRole); // Update the role name directly
+                userRepository.save(user);
+            }// Save the updated user
             default -> throw new IllegalArgumentException("Invalid field name");
         }
     }
+
+    @Override
+    public void removeEmployee(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+
+        // Remove the user associated with the employee
+        User user = employee.getUser();
+        if (user != null) {
+            userRepository.delete(user);
+        }
+
+        // Remove the employee from their department
+        if (employee.getDepartment() != null) {
+            Department department = employee.getDepartment();
+            department.getEmployees().remove(employee);
+            departmentRepository.save(department);
+        }
+
+        // Finally, delete the employee
+        employeeRepository.delete(employee);
+    }
+
 
     // Helper method to create User entity from DTO
     private User createUserFromDTO(UserEmployeeDTO userEmployeeDTO) {

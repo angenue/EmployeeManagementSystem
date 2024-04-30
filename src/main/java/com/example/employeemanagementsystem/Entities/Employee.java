@@ -19,12 +19,12 @@ public class Employee {
     private String lastName;
     private String phoneNumber;
 
-    @JsonIgnore
+    @JsonIgnore //prevents infinite recursion
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @JsonIgnore
+    @JsonIgnore //prevents infinite recursion
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
     private User user;
 

@@ -64,12 +64,4 @@ public class DepartmentController {
         return ResponseEntity.ok().body(manager);
     }
 
-
-    //remove employee
-    @DeleteMapping("/{departmentId}/{employeeId}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long departmentId, @PathVariable Long employeeId) {
-        departmentService.removeEmployeeFromDepartment(departmentId, employeeId);
-        return ResponseEntity.noContent().build();
-    }
-
 }

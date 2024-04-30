@@ -1,5 +1,6 @@
 package com.example.employeemanagementsystem.Entities;
 
+import com.example.employeemanagementsystem.util.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -22,9 +23,8 @@ public class User {
     private String email;
 
     private String password;
-    @OneToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Enumerated(EnumType.STRING)
+    private UserRole roleName; // Store the role name directly
 
     @OneToOne
     @JoinColumn(name = "employee_id")
