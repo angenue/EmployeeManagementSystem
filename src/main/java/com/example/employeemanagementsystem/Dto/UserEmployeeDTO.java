@@ -1,7 +1,6 @@
 package com.example.employeemanagementsystem.Dto;
 
 import com.example.employeemanagementsystem.Entities.Department;
-import com.example.employeemanagementsystem.Entities.Role;
 import com.example.employeemanagementsystem.util.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

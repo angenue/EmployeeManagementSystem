@@ -3,9 +3,11 @@ package com.example.employeemanagementsystem.Service;
 import com.example.employeemanagementsystem.Entities.Department;
 import com.example.employeemanagementsystem.Entities.Employee;
 import com.example.employeemanagementsystem.Repository.DepartmentRepository;
+import com.example.employeemanagementsystem.util.UserRole;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService{
@@ -38,22 +40,15 @@ public class DepartmentServiceImpl implements DepartmentService{
     @Override
     public List<Employee> getEmployeesInDepartment(Long departmentId) {
         Department department = getDepartmentById(departmentId);
-        return department != null ? department.getEmployees() : null; //return list of employees
-    }
-
-
-    //removes employee by id
-   /* @Override
-    public void removeEmployeeFromDepartment(Long departmentId, Long employeeId) {
-        Department department = getDepartmentById(departmentId);
         if (department != null) {
-            if (department.getManager() != null && department.getManager().getId().equals(employeeId)) {
-                department.setManager(null); // Remove the manager
-            }
-            department.getEmployees().removeIf(employee -> employee.getId().equals(employeeId));
-            departmentRepository.save(department);
+            // Filter out employees with a role other than "Employee"
+            return department.getEmployees().stream()
+                    .filter(employee -> employee.getUser().getRoleName() == UserRole.EMPLOYEE)
+                    .collect(Collectors.toList());
+        } else {
+            return null;
         }
-    }*/
+    }
 
     @Override
     public Employee getDepartmentManager(Long departmentId) {

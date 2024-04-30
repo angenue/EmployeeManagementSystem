@@ -47,9 +47,6 @@ public class DepartmentController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    //delete department
-
-
     // Retrieve all employees
     @GetMapping("/{departmentId}/employees")
     public ResponseEntity<List<Employee>> getEmployeesInDepartment(@PathVariable Long departmentId) {

@@ -10,7 +10,7 @@ import lombok.experimental.Helper;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
+public class Employee { //stores user personal info
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

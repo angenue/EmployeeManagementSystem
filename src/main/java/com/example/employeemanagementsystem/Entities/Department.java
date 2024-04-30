@@ -21,6 +21,7 @@ public class Department {
     @JoinColumn(name = "manager_id")
     private Employee manager;
 
+    //a department can have many users
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Employee> employees;
 

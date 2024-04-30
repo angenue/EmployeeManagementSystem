@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User { //storing the user credentials
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

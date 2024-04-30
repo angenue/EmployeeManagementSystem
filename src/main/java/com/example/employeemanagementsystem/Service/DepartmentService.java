@@ -13,14 +13,10 @@ public interface DepartmentService {
 
     Department getDepartmentById(Long id);
 
-
     void deleteDepartmentById(Long id);
 
     // Methods for managing employees within departments
-
     List<Employee> getEmployeesInDepartment(Long departmentId);
-
-    /*void removeEmployeeFromDepartment(Long departmentId, Long employeeId);*/
 
     // Methods for managing the department's manager
     Employee getDepartmentManager(Long departmentId);

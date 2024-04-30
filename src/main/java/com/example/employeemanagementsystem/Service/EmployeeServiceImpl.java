@@ -3,14 +3,11 @@ package com.example.employeemanagementsystem.Service;
 import com.example.employeemanagementsystem.Dto.UserEmployeeDTO;
 import com.example.employeemanagementsystem.Entities.Department;
 import com.example.employeemanagementsystem.Entities.Employee;
-import com.example.employeemanagementsystem.Entities.Role;
 import com.example.employeemanagementsystem.Entities.User;
 import com.example.employeemanagementsystem.Repository.DepartmentRepository;
 import com.example.employeemanagementsystem.Repository.EmployeeRepository;
-import com.example.employeemanagementsystem.Repository.RoleRepository;
 import com.example.employeemanagementsystem.Repository.UserRepository;
 import com.example.employeemanagementsystem.util.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,58 +18,55 @@ public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
     //private PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
 
-    public EmployeeServiceImpl(DepartmentRepository departmentRepository, RoleRepository roleRepository, EmployeeRepository employeeRepository, UserRepository userRepository) {
+    public EmployeeServiceImpl(DepartmentRepository departmentRepository,EmployeeRepository employeeRepository, UserRepository userRepository) {
         this.departmentRepository = departmentRepository;
-        this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
         this.userRepository = userRepository;
     }
 
     @Override
     public void addEmployee(UserEmployeeDTO userEmployeeDTO, Long departmentId) {
-        //need to add employee to department
+        //finding department id
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Department not found"));
 
         //creating login info
         User user = createUserFromDTO(userEmployeeDTO);
+        //setting role to employee
         user.setRoleName(UserRole.EMPLOYEE);
-
 
         //employee info
         Employee employee = createEmployeeFromDTO(userEmployeeDTO, department);
 
         user.setEmployee(employee);
+        department.getEmployees().add(employee); //adding employee to list
 
+        //saving repos
         employeeRepository.save(employee);
         userRepository.save(user);
-        department.getEmployees().add(employee);
         departmentRepository.save(department);
     }
 
     @Override
     public void addManager(UserEmployeeDTO userEmployeeDTO, Long departmentId) {
-        //need to add employee to department
+        //retrieving department
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Department not found"));
 
         //creating login info
         User user = createUserFromDTO(userEmployeeDTO);
+        //setting manager role
         user.setRoleName(UserRole.MANAGER);
-
 
         //employee info
         Employee manager = createEmployeeFromDTO(userEmployeeDTO, department);
-        //manager.setUser(user);
 
         user.setEmployee(manager);
+        department.setManager(manager); //setting manager in department
 
         employeeRepository.save(manager);
         userRepository.save(user);
-
-        department.setManager(manager);
         departmentRepository.save(department);
     }
 
@@ -85,7 +79,6 @@ public class EmployeeServiceImpl implements EmployeeService{
         // Retrieve the User entity
         User user = userRepository.findByEmployeeId(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
 
         // Update the specified field based on the fieldName
         switch (fieldName) {
@@ -111,9 +104,9 @@ public class EmployeeServiceImpl implements EmployeeService{
             }
             case "role" -> {
                 UserRole newRole = (UserRole) newValue;
-                user.setRoleName(newRole); // Update the role name directly
+                user.setRoleName(newRole);
                 userRepository.save(user);
-            }// Save the updated user
+            }
             default -> throw new IllegalArgumentException("Invalid field name");
         }
     }
@@ -133,12 +126,19 @@ public class EmployeeServiceImpl implements EmployeeService{
         if (employee.getDepartment() != null) {
             Department department = employee.getDepartment();
             department.getEmployees().remove(employee);
+
+            // Check if the employee is also a manager
+            if (employee.equals(department.getManager())) {
+                department.setManager(null); // Remove manager from department
+            }
+
             departmentRepository.save(department);
         }
 
-        // Finally, delete the employee
+        // delete the employee
         employeeRepository.delete(employee);
     }
+
 
 
     // Helper method to create User entity from DTO
