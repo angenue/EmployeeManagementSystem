@@ -42,12 +42,16 @@ public class EmployeeServiceImpl implements EmployeeService{
                 .orElseThrow(() -> new IllegalArgumentException("Employee role not found"));
         user.setRole(role);
 
-        userRepository.save(user);
+
 
         //employee info
         Employee employee = createEmployeeFromDTO(userEmployeeDTO, department);
         employee.setUser(user);
 
+        user.setEmployee(employee);
+
+        employeeRepository.save(employee);
+        userRepository.save(user);
         department.getEmployees().add(employee);
         departmentRepository.save(department);
     }
@@ -64,11 +68,15 @@ public class EmployeeServiceImpl implements EmployeeService{
                 .orElseThrow(() -> new IllegalArgumentException("Manager role not found"));
         user.setRole(role);
 
-        userRepository.save(user);
 
         //employee info
         Employee manager = createEmployeeFromDTO(userEmployeeDTO, department);
         manager.setUser(user);
+
+        user.setEmployee(manager);
+
+        employeeRepository.save(manager);
+        userRepository.save(user);
 
         department.setManager(manager);
         departmentRepository.save(department);
