@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         //employee info
         Employee employee = createEmployeeFromDTO(userEmployeeDTO, department);
-        employee.setUser(user);
+        //employee.setUser(user);
 
         user.setEmployee(employee);
 
@@ -71,7 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         //employee info
         Employee manager = createEmployeeFromDTO(userEmployeeDTO, department);
-        manager.setUser(user);
+        //manager.setUser(user);
 
         user.setEmployee(manager);
 
@@ -88,16 +88,18 @@ public class EmployeeServiceImpl implements EmployeeService{
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
+        // Retrieve the User entity
+        User user = userRepository.findByEmployeeId(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+
         // Update the specified field based on the fieldName
         switch (fieldName) {
             case "email" -> {
-                User user = employee.getUser();
                 user.setEmail((String) newValue);
                 userRepository.save(user);
             }
             case "password" -> {
-                User user = employee.getUser();
-                //user.setPassword(passwordEncoder.encode((String) newValue));
                 user.setPassword((String) newValue);
                 userRepository.save(user);
             }
@@ -116,14 +118,8 @@ public class EmployeeServiceImpl implements EmployeeService{
             case "role" -> {
                 Role role = roleRepository.findById((Long) newValue)
                         .orElseThrow(() -> new IllegalArgumentException("Role not found"));
-                employee.getUser().setRole(role);
-                userRepository.save(employee.getUser());
-            }
-            case "department" -> {
-                Department department = departmentRepository.findById((Long) newValue)
-                        .orElseThrow(() -> new IllegalArgumentException("Department not found"));
-                employee.setDepartment(department);
-                employeeRepository.save(employee);
+                user.setRole(role); // Update the role
+                userRepository.save(user); // Save the updated user
             }
             default -> throw new IllegalArgumentException("Invalid field name");
         }
@@ -141,7 +137,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     // Helper method to create Employee entity from DTO
     private Employee createEmployeeFromDTO(UserEmployeeDTO userEmployeeDTO, Department department) {
         Employee employee = new Employee();
-        employee.setDepartment(department);
+        //employee.setDepartment(department);
         employee.setFirstName(userEmployeeDTO.getFirstName());
         employee.setLastName(userEmployeeDTO.getLastName());
         employee.setPhoneNumber(userEmployeeDTO.getPhoneNumber());

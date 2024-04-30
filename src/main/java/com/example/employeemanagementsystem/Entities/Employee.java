@@ -1,10 +1,7 @@
 package com.example.employeemanagementsystem.Entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Helper;
 
 @Entity
@@ -21,11 +18,11 @@ public class Employee {
     private String lastName;
     private String phoneNumber;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
     @OneToOne(mappedBy = "employee")
-    private User user;
+    private User user;*/
 
 }

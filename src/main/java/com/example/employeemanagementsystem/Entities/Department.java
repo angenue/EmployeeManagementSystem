@@ -1,10 +1,7 @@
 package com.example.employeemanagementsystem.Entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class Department {
     @JoinColumn(name = "manager_id")
     private Employee manager;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany
     private List<Employee> employees;
 
 }

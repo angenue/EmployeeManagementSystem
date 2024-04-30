@@ -47,6 +47,9 @@ public class DepartmentServiceImpl implements DepartmentService{
     public void removeEmployeeFromDepartment(Long departmentId, Long employeeId) {
         Department department = getDepartmentById(departmentId);
         if (department != null) {
+            if (department.getManager() != null && department.getManager().getId().equals(employeeId)) {
+                department.setManager(null); // Remove the manager
+            }
             department.getEmployees().removeIf(employee -> employee.getId().equals(employeeId));
             departmentRepository.save(department);
         }
