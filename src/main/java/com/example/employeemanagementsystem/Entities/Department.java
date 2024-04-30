@@ -17,11 +17,11 @@ public class Department {
 
     private String name;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id")
     private Employee manager;
 
-    @OneToMany
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Employee> employees;
 
 }

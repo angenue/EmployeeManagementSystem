@@ -137,7 +137,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     // Helper method to create Employee entity from DTO
     private Employee createEmployeeFromDTO(UserEmployeeDTO userEmployeeDTO, Department department) {
         Employee employee = new Employee();
-        //employee.setDepartment(department);
+        employee.setDepartment(department);
         employee.setFirstName(userEmployeeDTO.getFirstName());
         employee.setLastName(userEmployeeDTO.getLastName());
         employee.setPhoneNumber(userEmployeeDTO.getPhoneNumber());

@@ -1,5 +1,6 @@
 package com.example.employeemanagementsystem.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Helper;
@@ -18,11 +19,13 @@ public class Employee {
     private String lastName;
     private String phoneNumber;
 
-    /*@ManyToOne
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @OneToOne(mappedBy = "employee")
-    private User user;*/
+    @JsonIgnore
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
+    private User user;
 
 }
